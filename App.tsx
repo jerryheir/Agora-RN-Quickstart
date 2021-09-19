@@ -203,46 +203,50 @@ const App: React.FC<Props> = ({}: Props) => {
 
   return (
     <ErrorBoundary
-      fallbackRender={({ error, resetErrorBoundary }) => (
-        <View
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text
+      fallbackRender={(props) => {
+        const { resetErrorBoundary } = props;
+        const err = props.error;
+        return (
+          <View
             style={{
-              textAlign: 'center',
-              alignSelf: 'center',
-              fontSize: 21,
-              fontWeight: 'bold',
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
-            Oh no
-          </Text>
-          <Text
-            style={{
-              textAlign: 'center',
-              alignSelf: 'center',
-              marginVertical: 21,
-            }}
-          >
-            {error.message}
-          </Text>
-          <TouchableOpacity
-            style={[styles.button, { alignSelf: 'center' }]}
-            onPress={() => {
-              // this next line is why the fallbackRender is useful
-              // resetComponentState()
-              // though you could accomplish this with a combination
-              // of the FallbackCallback and onReset props as well.
-              resetErrorBoundary();
-            }}
-          >
-            <Text style={styles.buttonText}>{'Try again'}</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+            <Text
+              style={{
+                textAlign: 'center',
+                alignSelf: 'center',
+                fontSize: 21,
+                fontWeight: 'bold',
+              }}
+            >
+              Oh no
+            </Text>
+            <Text
+              style={{
+                textAlign: 'center',
+                alignSelf: 'center',
+                marginVertical: 21,
+              }}
+            >
+              {err.message}
+            </Text>
+            <TouchableOpacity
+              style={[styles.button, { alignSelf: 'center' }]}
+              onPress={() => {
+                // this next line is why the fallbackRender is useful
+                // resetComponentState()
+                // though you could accomplish this with a combination
+                // of the FallbackCallback and onReset props as well.
+                resetErrorBoundary();
+              }}
+            >
+              <Text style={styles.buttonText}>{'Try again'}</Text>
+            </TouchableOpacity>
+          </View>
+        );
+      }}
       onError={(e, info) => {
         console.log(e, info);
         setError({
