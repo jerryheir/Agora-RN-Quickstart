@@ -85,7 +85,7 @@ const App: React.FC<Props> = ({}: Props) => {
       await _engine?.current?.enableVideo();
 
       _engine?.current?.addListener('Warning', (warn) => {
-        console.log('Warning', warn);
+        devLogger('Warning', JSON.stringify(warn).substring(0, 200));
         animateInto({
           boolean: true,
           header: 'Warning',
@@ -95,7 +95,7 @@ const App: React.FC<Props> = ({}: Props) => {
       });
 
       _engine?.current?.addListener('Error', (err) => {
-        console.log('Error', err);
+        devLogger('Error', JSON.stringify(err).substring(0, 200));
         animateInto({
           boolean: true,
           header: 'Error',
@@ -153,14 +153,17 @@ const App: React.FC<Props> = ({}: Props) => {
     );
   };
 
-  /**
-   * @name endCall
-   * @description Function to end the call
-   */
   const endCall = async () => {
     await _engine?.current?.leaveChannel();
     setPeerIds([]);
     setJoinSucceed(false);
+  };
+
+  const devLogger = (type: string, string: string) => {
+    console.log(
+      `${type.toUpperCase()}: `,
+      `${new Date().toISOString()} [${string}]`
+    );
   };
 
   const _renderVideos = () => {
